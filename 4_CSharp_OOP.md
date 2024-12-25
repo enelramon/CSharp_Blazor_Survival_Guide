@@ -7,8 +7,6 @@
 4. [Polimorfismo: Abrazando la Diversidad en Tipos](#polimorfismo-abrazando-la-diversidad-en-tipos)
 5. [Encapsulamiento: Protegiendo el Mundo Interior](#encapsulamiento-protegiendo-el-mundo-interior)
 6. [Clases Abstractas e Interfaces: Plano para Tipos](#clases-abstractas-e-interfaces-plano-para-tipos)
-7. [Clases de Datos: Simplificando la Creación de Clases de Datos](#clases-de-datos-simplificando-la-creación-de-clases-de-datos)
-8. [Interfaces Selladas: Definiendo Jerarquías de Tipos Restringidas](#interfaces-selladas-definiendo-jerarquías-de-tipos-restringidas)
 
 # Programación Orientada a Objetos en C# y .NET 9
 La Programación Orientada a Objetos gira en torno al concepto de objetos, que son instancias de clases, y C# integra estos conceptos perfectamente en su sintaxis. Exploraremos clases, objetos, herencia, polimorfismo, encapsulamiento y más. Vamos a sumergirnos en los fundamentos de la POO y cómo se manifiestan en C#.
