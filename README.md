@@ -10,6 +10,7 @@
    1. [C# OOP](./4_CSharp_OOP.md)
    1. [C# Exception Handling](./5_CSharp_Exception_Handling.md)
    1. [C# Collections](./6_CSharp_Collections.md)
+   1. [Uso de LINQ en C#](./7_)
    1. [C# Testing](./7_Testing.md)
 1. [Errores comunes](#errores-comunes)
    1. [Configuración del entorno](#configuración-del-entorno)
