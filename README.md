@@ -27,17 +27,12 @@ Bienvenido a la guía de supervivencia para estudiantes que trabajan con C# y Bl
 
 ### Configuración del entorno
 Descripción de errores como: 
-- Problemas al instalar Android Studio.
-- Versiones incompatibles de SDK.
 
 ### Problemas de diseño en UI
-Errores relacionados con ConstraintLayout, vistas, etc.
 
 ### Errores con bases de datos
-Problemas al usar Room, SQLite o APIs de persistencia.
 
 ### Errores al implementar lógica
-Errores en ViewModel, LiveData o navegación.
 
 ## Soluciones
 Detallaremos las soluciones paso a paso en cada sección.
