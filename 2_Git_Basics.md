@@ -212,6 +212,155 @@ git add archivo-resuelto.cs
 git commit -m "Resuelve conflicto en archivo-resuelto.cs"
 ```
 
+## Pull Requests (Solicitudes de Incorporación de Cambios)
+
+Un **Pull Request (PR)** es una solicitud para que tus cambios sean revisados y fusionados en la rama principal del proyecto. Es la forma profesional y colaborativa de integrar código en proyectos de equipo.
+
+### ¿Qué es un Pull Request?
+
+Un Pull Request no es un comando de Git, sino una característica de plataformas como GitHub, GitLab o Azure DevOps. Es básicamente decir: *"Aquí están mis cambios, por favor revísenlos antes de incorporarlos al proyecto"*.
+
+### ¿Por qué usar Pull Requests?
+
+1. **Revisión de código:** Otros pueden revisar tu código antes de fusionarlo
+2. **Discusión:** Puedes comentar líneas específicas y sugerir mejoras
+3. **Control de calidad:** Se pueden ejecutar pruebas automáticas antes de fusionar
+4. **Documentación:** Queda un registro de qué cambios se hicieron y por qué
+5. **Aprendizaje:** Los desarrolladores junior reciben retroalimentación de los seniors
+
+### Flujo de Trabajo con Pull Requests
+
+#### 1. Crea una rama para tu trabajo
+```bash
+git checkout -b feature/mi-nueva-funcionalidad
+```
+
+#### 2. Realiza tus cambios y haz commits
+```bash
+git add .
+git commit -m "Agrega nueva funcionalidad X"
+```
+
+#### 3. Sube tu rama al repositorio remoto
+```bash
+git push origin feature/mi-nueva-funcionalidad
+```
+
+#### 4. Crea el Pull Request
+
+Ve a la plataforma web (GitHub, GitLab, etc.) y:
+- Verás un botón que dice "Compare & pull request" o "Create pull request"
+- Completa la información:
+  - **Título:** Descripción breve de los cambios
+  - **Descripción:** Explica qué cambios hiciste y por qué
+  - **Revisores:** Selecciona quién debe revisar tu código
+  - **Etiquetas:** Agrega etiquetas como `bugfix`, `feature`, `documentation`
+
+#### 5. Proceso de Revisión
+
+Los revisores pueden:
+- **Aprobar** el PR si todo está bien
+- **Solicitar cambios** si encuentran problemas
+- **Comentar** líneas específicas del código
+
+#### 6. Realizar Cambios Solicitados
+
+Si te piden cambios:
+```bash
+# Asegúrate de estar en tu rama
+git checkout feature/mi-nueva-funcionalidad
+
+# Realiza los cambios solicitados
+# ... edita archivos ...
+
+# Haz commit de los cambios
+git add .
+git commit -m "Corrige problemas señalados en revisión"
+
+# Sube los nuevos commits
+git push origin feature/mi-nueva-funcionalidad
+```
+
+El Pull Request se actualizará automáticamente con tus nuevos commits.
+
+#### 7. Fusionar el Pull Request
+
+Una vez aprobado, alguien con permisos (puede ser tú) hará clic en **"Merge pull request"** en la plataforma web.
+
+Opciones de fusión:
+- **Merge commit:** Mantiene todos los commits (recomendado para equipos)
+- **Squash and merge:** Combina todos los commits en uno solo
+- **Rebase and merge:** Aplica los commits sobre la rama principal
+
+#### 8. Limpieza Post-Fusión
+
+```bash
+# Cambia a la rama main
+git checkout main
+
+# Actualiza tu rama main local
+git pull origin main
+
+# Elimina tu rama local (ya está fusionada)
+git branch -d feature/mi-nueva-funcionalidad
+
+# Opcionalmente, elimina la rama remota
+git push origin --delete feature/mi-nueva-funcionalidad
+```
+
+### Buenas Prácticas para Pull Requests
+
+1. **Mantén los PRs pequeños:** Más fáciles de revisar (idealmente < 400 líneas)
+2. **Un PR = una funcionalidad:** No mezcles cambios no relacionados
+3. **Escribe descripciones claras:** Explica qué, por qué y cómo
+4. **Agrega capturas de pantalla:** Si hay cambios visuales
+5. **Responde a comentarios:** Aunque no estés de acuerdo, explica tu razonamiento
+6. **Actualiza tu rama:** Si main avanza, trae los cambios a tu rama
+7. **Prueba tu código:** Antes de crear el PR, asegúrate de que funciona
+
+### Ejemplo de Buena Descripción de PR
+
+```markdown
+## Descripción
+Agrega validación de email en el formulario de registro.
+
+## Cambios realizados
+- Validación de formato de email usando regex
+- Mensaje de error cuando el email es inválido
+- Pruebas unitarias para la validación
+
+## Problema que resuelve
+Cierra #42 - Los usuarios podían registrarse con emails inválidos
+
+## Capturas de pantalla
+[Adjuntar imagen del formulario con validación]
+
+## Checklist
+- [x] El código compila sin errores
+- [x] Agregué pruebas unitarias
+- [x] Actualicé la documentación
+- [x] Probé en mi ambiente local
+```
+
+### Comandos Útiles para Trabajar con PRs
+
+Ver diferencias entre tu rama y main:
+```bash
+git diff main..feature/mi-rama
+```
+
+Actualizar tu rama con cambios de main:
+```bash
+git checkout feature/mi-rama
+git pull origin main
+```
+
+o usando rebase:
+```bash
+git checkout feature/mi-rama
+git rebase main
+```
+
 ## Deshacer Cambios
 
 ### 1. Descartar Cambios en un Archivo (antes de add)
