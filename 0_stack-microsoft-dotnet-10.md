@@ -3066,10 +3066,3 @@ La inversión en aprender .NET 10 es una inversión en una tecnología con futur
 7. Azure Documentation: https://docs.microsoft.com/azure
 8. C# Language Specification: https://docs.microsoft.com/dotnet/csharp
 9. .NET Performance Blog: https://devblogs.microsoft.com/dotnet/category/performance
-
----
-
-**Documento generado para fines educativos**
-**Versión: 1.0**
-**Fecha: Febrero 2026**
-**Licencia: Uso educacional**
