@@ -1,68 +1,98 @@
-# Testing con xUnit en C#
-
+# Guía Avanzada de Testing con xUnit en .NET
+Esta guía combina los fundamentos de xUnit con la configuración práctica necesaria para probar capas de negocio (BLL) y persistencia de datos.
 ## Índice
-1. [Introducción a xUnit](#introducción-a-xunit)
-2. [Configuración del Proyecto](#configuración-del-proyecto)
-3. [Escribiendo Pruebas Unitarias](#escribiendo-pruebas-unitarias)
-4. [Ejecutando Pruebas](#ejecutando-pruebas)
-5. [Mejores Prácticas](#mejores-prácticas)
-
-## Introducción a xUnit
-
-xUnit es un framework de pruebas unitarias para .NET que permite escribir y ejecutar pruebas de manera sencilla y eficiente. Es una de las herramientas más populares para realizar pruebas en aplicaciones .NET.
-
-## Configuración del Proyecto
-
-Para comenzar a usar xUnit, primero necesitas agregar el paquete xUnit a tu proyecto. Puedes hacerlo utilizando NuGet Package Manager o el siguiente comando en la consola del administrador de paquetes:
-
+ 1. Introducción a xUnit
+ 2. Configuración del Proyecto
+ 3. Creación de un Proyecto de Pruebas en Visual Studio
+ 4. Configuración de Entity Framework para Tests
+ 5. Escribiendo Pruebas para BLL
+ 6. El uso de la clase Assert
+ 7. Ejecución y Resultados
+ 8. Mejores Prácticas
+## 1. Introducción a xUnit
+xUnit es un framework moderno de pruebas unitarias para .NET. A diferencia de otros frameworks, utiliza atributos más simples como [Fact] para pruebas fijas y [Theory] para pruebas con datos variables.
+## 2. Configuración del Proyecto
+Para proyectos manuales o vía CLI, instala los paquetes esenciales:
 ```bash
 dotnet add package xunit
 dotnet add package xunit.runner.visualstudio
+
 ```
+## 3. Creación de un Proyecto de Pruebas en Visual Studio
+Según el flujo de trabajo estándar en Visual Studio:
+ 1. **Ubicación**: En el *Solution Explorer*, identifica la clase que deseas probar (por ejemplo, en la carpeta BLL).
+ 2. **Generación**: Puedes hacer clic derecho sobre el nombre de la clase y seleccionar **"Create Unit Tests"**.
+   * *Nota*: Asegúrate de seleccionar **xUnit** como el Test Framework en la ventana emergente.
+ 3. **Estructura**: Visual Studio creará un nuevo proyecto (ej. Login.BLL.Tests) con una clase de prueba vinculada.
+## 4. Configuración de Entity Framework para Tests
+Si tu lógica de negocio utiliza base de datos (Entity Framework), el proyecto de pruebas **también** debe estar configurado para conectarse.
+### Paso A: Agregar Configuración
+ 1. Haz clic derecho en el proyecto de Test -> **Add** -> **New Item**.
+ 2. Selecciona **Application Configuration File** y asegúrate de que se llame App.config.
+ 3. Abre el App.config del proyecto principal, copia el <connectionStrings> y pégalo en el App.config del proyecto de Test.
+### Paso B: Instalar Entity Framework
+Para que el Test reconozca el contexto de datos, abre la **Package Manager Console** y ejecuta:
+```powershell
+Install-Package EntityFramework -ProjectName TuProyectoDeTests
 
-## Escribiendo Pruebas Unitarias
-
-Las pruebas unitarias en xUnit se escriben en clases de prueba que contienen métodos de prueba. Cada método de prueba debe estar decorado con el atributo `[Fact]`.
-
-### Ejemplo 1: Prueba Unitaria Simple
+```
+## 5. Escribiendo Pruebas para BLL
+A continuación, un ejemplo de cómo probar un método Guardar en la capa UsuariosBLL.
+### Clase BLL (Código a probar)
 ```csharp
-using Xunit;
-
-public class CalculadoraTests
-{
-    [Fact]
-    public void Sumar_DosNumeros_RetornaResultadoCorrecto()
-    {
-        // Arrange
-        var calculadora = new Calculadora();
-        int a = 5;
-        int b = 3;
-
-        // Act
-        int resultado = calculadora.Sumar(a, b);
-
-        // Assert
-        Assert.Equal(8, resultado);
+public class UsuariosBLL {
+    public static bool Guardar(Usuarios user) {
+        bool paso = false;
+        try {
+            Contexto db = new Contexto();
+            db.Usuario.Add(user);
+            paso = db.SaveChanges() > 0;
+        } catch (Exception) { throw; }
+        return paso;
     }
 }
+
 ```
-En este ejemplo, se prueba el método `Sumar` de la clase `Calculadora` para verificar que retorna el resultado correcto.
+### Clase de Prueba (xUnit)
+```csharp
+public class UsuariosBLLTests {
+    [Fact]
+    public void GuardarTest() {
+        // Arrange (Preparar)
+        bool paso;
+        Usuarios usuario = new Usuarios() {
+            UsuarioId = 0,
+            NombreUsuario = "Prueba",
+            Clave = "1234"
+        };
 
-## Ejecutando Pruebas
+        // Act (Actuar)
+        paso = UsuariosBLL.Guardar(usuario);
 
-Para ejecutar las pruebas, puedes usar Visual Studio o la línea de comandos. En Visual Studio, simplemente abre el Explorador de Pruebas y ejecuta las pruebas desde allí. En la línea de comandos, usa el siguiente comando:
+        // Assert (Afirmar)
+        Assert.True(paso); // Verificamos que el resultado sea true
+    }
+}
 
-```bash
-dotnet test
 ```
-
-## Mejores Prácticas
-
-Al escribir pruebas unitarias con xUnit, considera las siguientes mejores prácticas para asegurar un código de prueba eficiente y legible:
-1. **Nombrado Claro:** Usa nombres descriptivos para las clases y métodos de prueba.
-2. **AAA Pattern:** Sigue el patrón Arrange-Act-Assert para estructurar tus pruebas.
-3. **Pruebas Aisladas:** Asegúrate de que cada prueba sea independiente y no dependa de otras pruebas.
-4. **Cobertura de Código:** Escribe pruebas que cubran tanto casos positivos como negativos.
-5. **Mantenibilidad:** Mantén el código de prueba limpio y fácil de mantener.
-
-xUnit es una herramienta poderosa para realizar pruebas unitarias en aplicaciones .NET. Al seguir estas mejores prácticas, puedes escribir pruebas más efectivas y mantener un alto nivel de calidad en tu código.
+## 6. El uso de la clase Assert
+La clase Assert es fundamental para verificar resultados. Aquí las equivalencias entre frameworks:
+| Propósito | MSTest (PDF) | xUnit (Recomendado) |
+|---|---|---|
+| Comprobar igualdad | Assert.AreEqual(a, b) | Assert.Equal(expected, actual) |
+| Verificar que es falso | Assert.IsFalse(val) | Assert.False(val) |
+| Verificar que es verdadero | Assert.IsTrue(val) | Assert.True(val) |
+| Verificar no nulo | Assert.IsNotNull(obj) | Assert.NotNull(obj) |
+## 7. Ejecución y Resultados
+Para ver si tus pruebas pasan:
+ 1. **Ejecutar**: Clic derecho sobre el método de prueba o la clase y selecciona **Run Tests**.
+ 2. **Test Explorer**:
+   * **Círculo Verde ✅**: La prueba pasó exitosamente.
+   * **Círculo Rojo ❌**: La prueba falló (el código no se comporta como esperabas).
+   * **Círculo Azul 🔵**: La prueba no se ha ejecutado.
+## 8. Mejores Prácticas
+ 1. **Patrón AAA**: Mantén siempre el orden *Arrange* (preparación), *Act* (ejecución) y *Assert* (verificación).
+ 2. **Nombres Descriptivos**: El nombre del test debe decir qué hace, ej: Guardar_UsuarioNuevo_RetornaTrue.
+ 3. **Limpieza**: Si haces pruebas contra una base de datos real, asegúrate de limpiar los datos de prueba después de cada ejecución.
+ 4. **Independencia**: Un test no debe depender de que otro test haya corrido antes.
+ 5. 
